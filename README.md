@@ -1,7 +1,7 @@
 # Paremeters
 - -role "the role to be executed"
 - -server_addr "the server address. Only valid when the role is 'server'"
-- -version "the server version. Only valid when the role is 'server'"
+- -version "the server version. Only valid when the role is 'client'"
 - -http_port "the http server port"
 - -grpc_port "the grpc server port"
 
