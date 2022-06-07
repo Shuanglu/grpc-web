@@ -48,4 +48,4 @@ jobs:
       with:
         context: .
         push: true
-        tags: shawnlu/grpcweb:env.tag
+        tags: shawnlu/grpcweb:${{ env.tag }}
