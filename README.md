@@ -6,7 +6,7 @@
 - -grpc_port "the grpc server port. Only valid when the role is 'server'"
 
 # Build
-- go build -o <file name> .
+- go build -o \<file name\> .
 
 
 # Usage
