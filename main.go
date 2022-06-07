@@ -37,7 +37,7 @@ func main() {
 
 			go webclient.Run(fmt.Sprintf("http://%s:%d", *server_addr, *http_port))
 
-			time.Sleep(5 * time.Millisecond)
+			time.Sleep(5 * time.Second)
 		}
 	}
 
