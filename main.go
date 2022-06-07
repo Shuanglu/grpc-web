@@ -32,11 +32,11 @@ func main() {
 		wg.Wait()
 	} else {
 		for {
-			wg.Add(1)
+
 			go grpcclient.Run(fmt.Sprintf("%s:%d", *server_addr, *grpc_port))
-			wg.Add(1)
+
 			go webclient.Run(fmt.Sprintf("http://%s:%d", *server_addr, *http_port))
-			wg.Wait()
+
 			time.Sleep(5 * time.Millisecond)
 		}
 	}
