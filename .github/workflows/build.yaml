@@ -19,7 +19,7 @@ jobs:
     - run: mkdir -p output
 
     - name: Build
-      run: go build -v -o output/grpcweb .
+      run: go build -v -ldflags "-s -w" -o output/grpcweb .
       
     - uses: actions/upload-artifact@v3
       with: 

@@ -50,6 +50,6 @@ func Run(grpcAddr string) error {
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
-	log.Printf("Greeting: %s", r.GetMessage())
+	log.Printf("GRPC Response: %s", r.GetMessage())
 	return nil
 }

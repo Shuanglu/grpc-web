@@ -16,6 +16,6 @@ func Run(httpAddr string) error {
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
-	log.Printf("Body : %s", body)
+	log.Printf("HTTP Response: %s", body)
 	return nil
 }
