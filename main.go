@@ -42,9 +42,9 @@ func main() {
 			time.Sleep(5 * time.Second)
 		}
 	} else if *role == "both" {
-
+		wg.Add(1)
 		go grpcserver.Run(server_grpc_port, version)
-
+		wg.Add(1)
 		go webserver.Run(server_http_port, version)
 
 		for {
@@ -52,7 +52,7 @@ func main() {
 			go webclient.Run(fmt.Sprintf("http://%s:%d", *server_addr, *client_http_port))
 			time.Sleep(5 * time.Second)
 		}
-
+		wg.Wait()
 	}
 
 }

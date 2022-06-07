@@ -9,7 +9,7 @@ import (
 var inputVersion *string
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "web server. This is version %s!", *inputVersion)
+	fmt.Fprintf(w, "web server. This is version %s", *inputVersion)
 }
 
 func Run(port *int, version *string) error {
