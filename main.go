@@ -19,8 +19,8 @@ var (
 	server_grpc_port = flag.Int("server_grpc_port", 50051, "the grpc server port")
 	version          = flag.String("version", "", "the server version")
 	server_addr      = flag.String("server_addr", "", "the server address")
-	client_http_port = flag.Int("client_http_port", 8001, "the http server port")
-	client_grpc_port = flag.Int("client_grpc_port", 50051, "the grpc server port")
+	client_http_port = flag.Int("client_http_port", 8001, "the http port of destination")
+	client_grpc_port = flag.Int("client_grpc_port", 50051, "the grpc port of destination")
 )
 
 func main() {
