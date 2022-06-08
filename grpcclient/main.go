@@ -27,13 +27,14 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	pb "google.golang.org/grpc/examples/helloworld/helloworld"
+	"google.golang.org/grpc/metadata"
 )
 
 const (
 	name = "world"
 )
 
-func Run(grpcAddr string) error {
+func Run(grpcAddr string, host string) error {
 
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(grpcAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
@@ -45,6 +46,7 @@ func Run(grpcAddr string) error {
 
 	// Contact the server and print out its response.
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx = metadata.AppendToOutgoingContext(ctx, "Host", host)
 	defer cancel()
 	r, err := c.SayHello(ctx, &pb.HelloRequest{Name: name})
 	if err != nil {

@@ -7,9 +7,11 @@ import (
 	"time"
 )
 
-func Run(httpAddr string) error {
+func Run(httpAddr string, host string) error {
 	c := http.Client{Timeout: time.Duration(1) * time.Second}
-	resp, err := c.Get(httpAddr)
+	req, err := http.NewRequest("GET", httpAddr, nil)
+	req.Header.Set("Host", host)
+	resp, err := c.Do(req)
 	if err != nil {
 		log.Printf("Error %s", err)
 		return err

@@ -14,13 +14,14 @@ import (
 )
 
 var (
-	role             = flag.String("role", "server", "the role to be executed. Options: client/server/both")
-	server_http_port = flag.Int("server_http_port", 8001, "the http server port")
-	server_grpc_port = flag.Int("server_grpc_port", 50051, "the grpc server port")
-	version          = flag.String("version", "", "the server version")
-	server_addr      = flag.String("server_addr", "", "the server address")
-	client_http_port = flag.Int("client_http_port", 8001, "the http port of destination")
-	client_grpc_port = flag.Int("client_grpc_port", 50051, "the grpc port of destination")
+	role               = flag.String("role", "server", "the role to be executed. Options: client/server/both")
+	server_http_port   = flag.Int("server_http_port", 8001, "the http server port")
+	server_grpc_port   = flag.Int("server_grpc_port", 50051, "the grpc server port")
+	version            = flag.String("version", "", "the server version")
+	client_server_addr = flag.String("client_server_addr", "localhost", "the server address of destination")
+	client_http_port   = flag.Int("client_http_port", 8001, "the http port of destination")
+	client_grpc_port   = flag.Int("client_grpc_port", 50051, "the grpc port of destination")
+	client_header_host = flag.String("client_header_host", "", "the host to be added to the headr")
 )
 
 func main() {
@@ -35,9 +36,9 @@ func main() {
 	} else if *role == "client" {
 		for {
 
-			go grpcclient.Run(fmt.Sprintf("%s:%d", *server_addr, *client_grpc_port))
+			go grpcclient.Run(fmt.Sprintf("%s:%d", *client_server_addr, *client_grpc_port))
 
-			go webclient.Run(fmt.Sprintf("http://%s:%d", *server_addr, *client_http_port))
+			go webclient.Run(fmt.Sprintf("http://%s:%d", *client_server_addr, *client_http_port))
 
 			time.Sleep(5 * time.Second)
 		}
@@ -48,8 +49,8 @@ func main() {
 		go webserver.Run(server_http_port, version)
 
 		for {
-			go grpcclient.Run(fmt.Sprintf("%s:%d", *server_addr, *client_grpc_port))
-			go webclient.Run(fmt.Sprintf("http://%s:%d", *server_addr, *client_http_port))
+			go grpcclient.Run(fmt.Sprintf("%s:%d", *client_server_addr, *client_grpc_port), *client_header_host)
+			go webclient.Run(fmt.Sprintf("http://%s:%d", *client_server_addr, *client_http_port), *client_header_host)
 			time.Sleep(5 * time.Second)
 		}
 		wg.Wait()

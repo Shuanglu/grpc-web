@@ -1,12 +1,13 @@
 # GRPCWeb
 ## Parameters
 - -role "the role to be executed"
-- -server_addr "the server address. Only valid when the role is 'server'"
-- -version "the server version. Only valid when the role is 'client'"
+- -client_server_addr "the server address. Only valid when the role is 'client'"
+- -version "the server version. Only valid when the role is 'server'"
 - -server_http_port "the http server port"
 - -server_grpc_port "the grpc server port"
 - -client_http_port "the http port of destination"
 - -client_grpc_port "the grpc port of destination"
+- -client_header_host "the host to be added to the header"
 
 ## Build
 - go build -o \<file name\> .
