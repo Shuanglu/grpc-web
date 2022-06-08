@@ -36,9 +36,9 @@ func main() {
 	} else if *role == "client" {
 		for {
 
-			go grpcclient.Run(fmt.Sprintf("%s:%d", *client_server_addr, *client_grpc_port))
+			go grpcclient.Run(fmt.Sprintf("%s:%d", *client_server_addr, *client_grpc_port), *client_header_host)
 
-			go webclient.Run(fmt.Sprintf("http://%s:%d", *client_server_addr, *client_http_port))
+			go webclient.Run(fmt.Sprintf("http://%s:%d", *client_server_addr, *client_http_port), *client_header_host)
 
 			time.Sleep(5 * time.Second)
 		}
