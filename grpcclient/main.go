@@ -55,6 +55,6 @@ func Run(grpcAddr string, host string, mesh string) error {
 	if err != nil {
 		log.Printf("could not greet: %v", err)
 	}
-	log.Printf("GRPC | client mesh: %q | server mesh/version: %q ", mesh, r.GetMessage())
+	log.Printf("GRPC | client running in mesh: %q | server running in mesh/version: %q ", mesh, r.GetMessage())
 	return nil
 }

@@ -18,6 +18,6 @@ func Run(httpAddr string, host string, mesh string) error {
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
-	log.Printf("HTTP | client running in %q mesh | server running in %q mesh/version", mesh, body)
+	log.Printf("HTTP | client running in mesh: %q | server running in mesh/version: %q ", mesh, body)
 	return nil
 }
