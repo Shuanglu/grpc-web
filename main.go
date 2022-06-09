@@ -30,35 +30,35 @@ var (
 
 func main() {
 	flag.Parse()
-	namespace := os.Getenv("namespace")
-	log.Printf("This is an app running in the %s namespace", namespace)
+	mesh := os.Getenv("mesh")
+	log.Printf("This is an app running in the %q mesh", mesh)
 	var wg sync.WaitGroup
 	wg.Add(1)
-	go grpc_run(fmt.Sprintf("%s:%d", *client_server_addr, *client_grpc_port), *client_header_host, namespace, *role)
+	go grpc_run(fmt.Sprintf("%s:%d", *client_server_addr, *client_grpc_port), *client_header_host, mesh, *role)
 	wg.Add(1)
-	go http_run(fmt.Sprintf("http://%s:%d", *client_server_addr, *client_grpc_port), *client_header_host, namespace, *role)
+	go http_run(fmt.Sprintf("http://%s:%d", *client_server_addr, *client_grpc_port), *client_header_host, mesh, *role)
 	wg.Wait()
 }
 
-func grpc_run(dest string, host string, namespace string, role string) {
+func grpc_run(dest string, host string, mesh string, role string) {
 	var wg sync.WaitGroup
 	if role == "server" {
 		wg.Add(1)
-		go grpcserver.Run(server_grpc_port, version, namespace)
+		go grpcserver.Run(server_grpc_port, version, mesh)
 		wg.Wait()
 	} else if role == "client" {
 		for {
 			if *client_grpc {
-				go grpcclient.Run(dest, host, namespace)
+				go grpcclient.Run(dest, host, mesh)
 			}
 			time.Sleep(5 * time.Second)
 		}
 	} else {
 		wg.Add(1)
-		go grpcserver.Run(server_grpc_port, version, namespace)
+		go grpcserver.Run(server_grpc_port, version, mesh)
 		for {
 			if *client_grpc {
-				go grpcclient.Run(dest, host, namespace)
+				go grpcclient.Run(dest, host, mesh)
 			}
 			time.Sleep(5 * time.Second)
 		}
@@ -66,25 +66,25 @@ func grpc_run(dest string, host string, namespace string, role string) {
 	}
 }
 
-func http_run(dest string, host string, namespace string, role string) {
+func http_run(dest string, host string, mesh string, role string) {
 	var wg sync.WaitGroup
 	if role == "server" {
 		wg.Add(1)
-		go webserver.Run(server_http_port, version, namespace)
+		go webserver.Run(server_http_port, version, mesh)
 		wg.Wait()
 	} else if role == "client" {
 		for {
 			if *client_http {
-				go webclient.Run(dest, host, namespace)
+				go webclient.Run(dest, host, mesh)
 			}
 			time.Sleep(5 * time.Second)
 		}
 	} else {
 		wg.Add(1)
-		go webserver.Run(server_http_port, version, namespace)
+		go webserver.Run(server_http_port, version, mesh)
 		for {
 			if *client_http {
-				go webclient.Run(dest, host, namespace)
+				go webclient.Run(dest, host, mesh)
 			}
 			time.Sleep(5 * time.Second)
 		}
