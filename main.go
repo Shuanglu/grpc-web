@@ -70,7 +70,7 @@ func http_run(dest string, host string, namespace string, role string) {
 	var wg sync.WaitGroup
 	if role == "server" {
 		wg.Add(1)
-		go webserver.Run(server_grpc_port, version, namespace)
+		go webserver.Run(server_http_port, version, namespace)
 		wg.Wait()
 	} else if role == "client" {
 		for {
@@ -81,7 +81,7 @@ func http_run(dest string, host string, namespace string, role string) {
 		}
 	} else {
 		wg.Add(1)
-		go webserver.Run(server_grpc_port, version, namespace)
+		go webserver.Run(server_http_port, version, namespace)
 		for {
 			if *client_http {
 				go webclient.Run(dest, host, namespace)
