@@ -25,6 +25,7 @@ import (
 	"time"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	pb "google.golang.org/grpc/examples/helloworld/helloworld"
 )
 
@@ -35,8 +36,9 @@ const (
 func Run(grpcAddr string, host string) error {
 
 	// Set up a connection to the server.
-
-	conn, err := grpc.Dial(grpcAddr, grpc.WithAuthority(host))
+	var opts []grpc.DialOption
+	opts = append(opts, grpc.WithAuthority(host), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(grpcAddr, opts...)
 	if err != nil {
 		log.Printf("did not connect: %v", err)
 	}
