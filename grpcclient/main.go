@@ -46,7 +46,7 @@ func Run(grpcAddr string, host string) error {
 
 	// Contact the server and print out its response.
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	ctx = metadata.AppendToOutgoingContext(ctx, "Host", host, ":authority", host)
+	ctx = metadata.AppendToOutgoingContext(ctx, "Authority", host)
 	defer cancel()
 	r, err := c.SayHello(ctx, &pb.HelloRequest{Name: name})
 	if err != nil {
