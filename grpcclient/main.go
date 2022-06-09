@@ -33,7 +33,7 @@ const (
 	name = "world"
 )
 
-func Run(grpcAddr string, host string) error {
+func Run(grpcAddr string, host string, namespace string) error {
 
 	// Set up a connection to the server.
 	var opts []grpc.DialOption
@@ -55,6 +55,6 @@ func Run(grpcAddr string, host string) error {
 	if err != nil {
 		log.Printf("could not greet: %v", err)
 	}
-	log.Printf("GRPC Response: %s", r.GetMessage())
+	log.Printf("GRPC | client namespace: %s. server namespace/version: %s ", namespace, r.GetMessage())
 	return nil
 }

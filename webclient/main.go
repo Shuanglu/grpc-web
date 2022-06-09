@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func Run(httpAddr string, host string) error {
+func Run(httpAddr string, host string, namespace string) error {
 	c := http.Client{Timeout: time.Duration(1) * time.Second}
 	req, err := http.NewRequest("GET", httpAddr, nil)
 	req.Header.Set("Host", host)
@@ -18,6 +18,6 @@ func Run(httpAddr string, host string) error {
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
-	log.Printf("HTTP Response: %s", body)
+	log.Printf("HTTP | client namespace: %s. server namespace/version: %s ", namespace, body)
 	return nil
 }
