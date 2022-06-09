@@ -8,6 +8,8 @@
 - -client_http_port "the http port of destination"
 - -client_grpc_port "the grpc port of destination"
 - -client_header_host "the host to be added to the header"
+- -client_grpc "whether to start grpc client"
+- -client_http "whether to start http client"
 
 ## Build
 - go build -o \<file name\> .
