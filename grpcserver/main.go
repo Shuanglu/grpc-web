@@ -30,7 +30,8 @@ import (
 )
 
 var inputVersion *string
-var inputmesh string
+var inputMesh string
+var inputIp string
 
 // server is used to implement helloworld.GreeterServer.
 type server struct {
@@ -40,13 +41,14 @@ type server struct {
 // SayHello implements helloworld.GreeterServer
 func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
 	log.Printf("Received: %v", in.GetName())
-	return &pb.HelloReply{Message: inputmesh + "/" + *inputVersion}, nil
+	return &pb.HelloReply{Message: fmt.Sprintf("Server is running in the %q mesh. Version is %q. IP is %q", *inputVersion, inputMesh, inputIp)}, nil
 }
 
-func Run(port *int, version *string, mesh string) {
+func Run(port *int, version *string, mesh string, ip string) {
 
 	inputVersion = version
-	inputmesh = mesh
+	inputMesh = mesh
+	inputIp = ip
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)

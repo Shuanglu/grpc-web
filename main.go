@@ -31,20 +31,21 @@ var (
 func main() {
 	flag.Parse()
 	mesh := os.Getenv("mesh")
+	ip := os.Getenv("POD_IP")
 	log.Printf("This is an app running in the %q mesh", mesh)
 	var wg sync.WaitGroup
 	wg.Add(1)
-	go grpc_run(fmt.Sprintf("%s:%d", *client_server_addr, *client_grpc_port), *client_header_host, mesh, *role)
+	go grpc_run(fmt.Sprintf("%s:%d", *client_server_addr, *client_grpc_port), *client_header_host, mesh, ip, *role)
 	wg.Add(1)
-	go http_run(fmt.Sprintf("http://%s:%d", *client_server_addr, *client_grpc_port), *client_header_host, mesh, *role)
+	go http_run(fmt.Sprintf("http://%s:%d", *client_server_addr, *client_grpc_port), *client_header_host, mesh, ip, *role)
 	wg.Wait()
 }
 
-func grpc_run(dest string, host string, mesh string, role string) {
+func grpc_run(dest string, host string, mesh string, ip string, role string) {
 	var wg sync.WaitGroup
 	if role == "server" {
 		wg.Add(1)
-		go grpcserver.Run(server_grpc_port, version, mesh)
+		go grpcserver.Run(server_grpc_port, version, mesh, ip)
 		wg.Wait()
 	} else if role == "client" {
 		for {
@@ -55,7 +56,7 @@ func grpc_run(dest string, host string, mesh string, role string) {
 		}
 	} else {
 		wg.Add(1)
-		go grpcserver.Run(server_grpc_port, version, mesh)
+		go grpcserver.Run(server_grpc_port, version, mesh, ip)
 		for {
 			if *client_grpc {
 				go grpcclient.Run(dest, host, mesh)
@@ -66,11 +67,11 @@ func grpc_run(dest string, host string, mesh string, role string) {
 	}
 }
 
-func http_run(dest string, host string, mesh string, role string) {
+func http_run(dest string, host string, mesh string, ip string, role string) {
 	var wg sync.WaitGroup
 	if role == "server" {
 		wg.Add(1)
-		go webserver.Run(server_http_port, version, mesh)
+		go webserver.Run(server_http_port, version, mesh, ip)
 		wg.Wait()
 	} else if role == "client" {
 		for {
@@ -81,7 +82,7 @@ func http_run(dest string, host string, mesh string, role string) {
 		}
 	} else {
 		wg.Add(1)
-		go webserver.Run(server_http_port, version, mesh)
+		go webserver.Run(server_http_port, version, mesh, ip)
 		for {
 			if *client_http {
 				go webclient.Run(dest, host, mesh)
