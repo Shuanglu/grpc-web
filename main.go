@@ -37,7 +37,7 @@ func main() {
 	wg.Add(1)
 	go grpc_run(fmt.Sprintf("%s:%d", *client_server_addr, *client_grpc_port), *client_header_host, mesh, ip, *role)
 	wg.Add(1)
-	go http_run(fmt.Sprintf("http://%s:%d", *client_server_addr, *client_grpc_port), *client_header_host, mesh, ip, *role)
+	go http_run(fmt.Sprintf("http://%s:%d", *client_server_addr, *client_http_port), *client_header_host, mesh, ip, *role)
 	wg.Wait()
 }
 
