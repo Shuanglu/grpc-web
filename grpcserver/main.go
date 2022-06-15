@@ -41,7 +41,7 @@ type server struct {
 // SayHello implements helloworld.GreeterServer
 func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
 	log.Printf("Received: %v", in.GetName())
-	return &pb.HelloReply{Message: fmt.Sprintf("Server is running in the %q mesh. Version is %q. IP is %q", *inputVersion, inputMesh, inputIp)}, nil
+	return &pb.HelloReply{Message: fmt.Sprintf("Server is running in the %q mesh. Version is %q. IP is %q", inputMesh, *inputVersion, inputIp)}, nil
 }
 
 func Run(port *int, version *string, mesh string, ip string) {
