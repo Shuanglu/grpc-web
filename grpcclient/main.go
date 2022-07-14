@@ -61,6 +61,7 @@ func Run(grpcAddr string, host string, mesh string, ip string) error {
 			r, err := c.SayHello(ctx, &pb.HelloRequest{Name: name})
 			if err != nil {
 				log.Printf("could not greet: %v", err)
+				go Run(grpcAddr, host, mesh, ip)
 			} else {
 				log.Printf("GRPC | client is running in the mesh: %q | %s ", mesh, r.GetMessage())
 			}
