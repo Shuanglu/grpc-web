@@ -42,7 +42,7 @@ type server struct {
 // SayHello implements helloworld.GreeterServer
 func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
 	if peer, ok := peer.FromContext(ctx); ok {
-		log.Printf("Received the request from %q", peer.Addr)
+		log.Printf("GRPC | Received the request from %q", peer.Addr)
 	} else {
 		log.Printf("Failed to get context information")
 	}

@@ -8,13 +8,14 @@ import (
 	"time"
 )
 
-func Run(httpAddr string, host string, mesh string) error {
+func Run(httpAddr string, host string, mesh string, ip string) error {
 	c := http.Client{Timeout: time.Duration(1) * time.Second}
 	req, err := http.NewRequest("GET", httpAddr, nil)
 	if err != nil {
-		log.Printf("Failed to generate request: ", err)
+		log.Printf("Failed to generate request: %s", err)
 	}
 	req.Header.Set("Host", host)
+	req.Header.Set("X-Forwarded-For", ip)
 	var wg sync.WaitGroup
 	for {
 		wg.Add(1)
@@ -25,7 +26,7 @@ func Run(httpAddr string, host string, mesh string) error {
 			} else {
 				body, err := ioutil.ReadAll(resp.Body)
 				if err != nil {
-					log.Printf("Could not read the body: ", err)
+					log.Printf("Could not read the body: %s", err)
 				}
 				defer resp.Body.Close()
 				log.Printf("HTTP | Client is running in the mesh: %q | %s ", mesh, body)
