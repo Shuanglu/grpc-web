@@ -43,7 +43,9 @@ type server struct {
 // SayHello implements helloworld.GreeterServer
 func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
 	if md, ok := metadata.FromIncomingContext(ctx); ok {
-		log.Printf("GRPC | Received the request from %q", md.Get("x-real-ip")[0])
+		if len(md.Get("x-real-ip")) == 1 {
+			log.Printf("GRPC | Received the request from %q", md.Get("x-real-ip")[0])
+		}
 	} else {
 		log.Printf("Failed to get context information")
 	}
