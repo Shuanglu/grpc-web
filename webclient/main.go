@@ -27,9 +27,10 @@ func Run(httpAddr string, host string, mesh string) error {
 				if err != nil {
 					log.Printf("Could not read the body: ", err)
 				}
+				defer resp.Body.Close()
 				log.Printf("HTTP | Client is running in the mesh: %q | %s ", mesh, body)
 			}
-			defer resp.Body.Close()
+
 			wg.Done()
 		}()
 		time.Sleep(5 * time.Second)
