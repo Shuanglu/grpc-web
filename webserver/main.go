@@ -12,6 +12,7 @@ var inputIp string
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Server is running in the %q mesh. Version is %q. IP is %q", inputMesh, *inputVersion, inputIp)
+	log.Printf("Received the request from %q", r.RemoteAddr)
 }
 
 func Run(port *int, version *string, mesh string, ip string) error {
