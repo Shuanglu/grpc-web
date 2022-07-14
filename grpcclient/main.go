@@ -46,7 +46,7 @@ func Run(grpcAddr string, host string, mesh string) error {
 	c := pb.NewGreeterClient(conn)
 
 	// Contact the server and print out its response.
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	/*
 		ctx = metadata.AppendToOutgoingContext(ctx, ":authority", host)
 	*/
@@ -54,7 +54,9 @@ func Run(grpcAddr string, host string, mesh string) error {
 	r, err := c.SayHello(ctx, &pb.HelloRequest{Name: name})
 	if err != nil {
 		log.Printf("could not greet: %v", err)
+	} else {
+		log.Printf("GRPC | client is running in the mesh: %q | %s ", mesh, r.GetMessage())
 	}
-	log.Printf("GRPC | client is running in the mesh: %q | %s ", mesh, r.GetMessage())
+
 	return nil
 }
