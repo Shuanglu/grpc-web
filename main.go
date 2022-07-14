@@ -52,7 +52,7 @@ func grpc_run(dest string, host string, mesh string, ip string, role string) {
 			if *client_grpc {
 				go grpcclient.Run(dest, host, mesh)
 			}
-			time.Sleep(5 * time.Second)
+			time.Sleep(10 * time.Second)
 		}
 	} else {
 		wg.Add(1)
@@ -61,7 +61,7 @@ func grpc_run(dest string, host string, mesh string, ip string, role string) {
 			if *client_grpc {
 				go grpcclient.Run(dest, host, mesh)
 			}
-			time.Sleep(5 * time.Second)
+			time.Sleep(10 * time.Second)
 		}
 		wg.Wait()
 	}
@@ -78,7 +78,7 @@ func http_run(dest string, host string, mesh string, ip string, role string) {
 			if *client_http {
 				go webclient.Run(dest, host, mesh)
 			}
-			time.Sleep(5 * time.Second)
+			time.Sleep(10 * time.Second)
 		}
 	} else {
 		wg.Add(1)
@@ -87,7 +87,7 @@ func http_run(dest string, host string, mesh string, ip string, role string) {
 			if *client_http {
 				go webclient.Run(dest, host, mesh)
 			}
-			time.Sleep(5 * time.Second)
+			time.Sleep(10 * time.Second)
 		}
 		wg.Wait()
 	}
