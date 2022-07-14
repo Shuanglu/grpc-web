@@ -7,7 +7,6 @@ import (
 	"os"
 
 	"sync"
-	"time"
 
 	"github.com/shuanglu/grpc-web/grpcclient"
 	"github.com/shuanglu/grpc-web/grpcserver"
@@ -42,53 +41,32 @@ func main() {
 }
 
 func grpc_run(dest string, host string, mesh string, ip string, role string) {
-	var wg sync.WaitGroup
 	if role == "server" {
-		wg.Add(1)
-		go grpcserver.Run(server_grpc_port, version, mesh, ip)
-		wg.Wait()
+		grpcserver.Run(server_grpc_port, version, mesh, ip)
 	} else if role == "client" {
-		for {
-			if *client_grpc {
-				go grpcclient.Run(dest, host, mesh)
-			}
-			time.Sleep(10 * time.Second)
+		if *client_grpc {
+			grpcclient.Run(dest, host, mesh)
 		}
 	} else {
-		wg.Add(1)
 		go grpcserver.Run(server_grpc_port, version, mesh, ip)
-		for {
-			if *client_grpc {
-				go grpcclient.Run(dest, host, mesh)
-			}
-			time.Sleep(10 * time.Second)
+		if *client_grpc {
+			grpcclient.Run(dest, host, mesh)
 		}
-		wg.Wait()
 	}
 }
 
 func http_run(dest string, host string, mesh string, ip string, role string) {
-	var wg sync.WaitGroup
+
 	if role == "server" {
-		wg.Add(1)
-		go webserver.Run(server_http_port, version, mesh, ip)
-		wg.Wait()
+		webserver.Run(server_http_port, version, mesh, ip)
 	} else if role == "client" {
-		for {
-			if *client_http {
-				go webclient.Run(dest, host, mesh)
-			}
-			time.Sleep(10 * time.Second)
+		if *client_http {
+			go webclient.Run(dest, host, mesh)
 		}
 	} else {
-		wg.Add(1)
 		go webserver.Run(server_http_port, version, mesh, ip)
-		for {
-			if *client_http {
-				go webclient.Run(dest, host, mesh)
-			}
-			time.Sleep(10 * time.Second)
+		if *client_http {
+			go webclient.Run(dest, host, mesh)
 		}
-		wg.Wait()
 	}
 }
