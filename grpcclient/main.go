@@ -44,18 +44,19 @@ func Run(grpcAddr string, host string, mesh string) error {
 		log.Printf("did not connect: %v", err)
 	}
 	defer conn.Close()
-	c := pb.NewGreeterClient(conn)
 
-	// Contact the server and print out its response.
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	/*
-		ctx = metadata.AppendToOutgoingContext(ctx, ":authority", host)
-	*/
-	defer cancel()
 	var wg sync.WaitGroup
 	for {
 		wg.Add(1)
 		go func() {
+			c := pb.NewGreeterClient(conn)
+
+			// Contact the server and print out its response.
+			ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+			/*
+				ctx = metadata.AppendToOutgoingContext(ctx, ":authority", host)
+			*/
+			defer cancel()
 			r, err := c.SayHello(ctx, &pb.HelloRequest{Name: name})
 			if err != nil {
 				log.Printf("could not greet: %v", err)
