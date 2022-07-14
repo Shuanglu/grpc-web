@@ -45,12 +45,12 @@ func grpc_run(dest string, host string, mesh string, ip string, role string) {
 		grpcserver.Run(server_grpc_port, version, mesh, ip)
 	} else if role == "client" {
 		if *client_grpc {
-			grpcclient.Run(dest, host, mesh)
+			grpcclient.Run(dest, host, mesh, ip)
 		}
 	} else {
 		go grpcserver.Run(server_grpc_port, version, mesh, ip)
 		if *client_grpc {
-			grpcclient.Run(dest, host, mesh)
+			grpcclient.Run(dest, host, mesh, ip)
 		}
 	}
 }

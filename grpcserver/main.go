@@ -27,7 +27,7 @@ import (
 
 	"google.golang.org/grpc"
 	pb "google.golang.org/grpc/examples/helloworld/helloworld"
-	"google.golang.org/grpc/peer"
+	"google.golang.org/grpc/metadata"
 )
 
 var inputVersion *string
@@ -41,8 +41,8 @@ type server struct {
 
 // SayHello implements helloworld.GreeterServer
 func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
-	if peer, ok := peer.FromContext(ctx); ok {
-		log.Printf("GRPC | Received the request from %q", peer.Addr)
+	if md, ok := metadata.FromIncomingContext(ctx); ok {
+		log.Printf("GRPC | Received the request from %q", md.Get("x-real-ip")[0])
 	} else {
 		log.Printf("Failed to get context information")
 	}
