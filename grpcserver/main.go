@@ -28,6 +28,7 @@ import (
 	"google.golang.org/grpc"
 	pb "google.golang.org/grpc/examples/helloworld/helloworld"
 	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/reflection"
 )
 
 var inputVersion *string
@@ -60,6 +61,7 @@ func Run(port *int, version *string, mesh string, ip string) {
 	}
 	s := grpc.NewServer()
 	pb.RegisterGreeterServer(s, &server{})
+	reflection.Register(s)
 	log.Printf("grpc server %q listening at %v", *version, lis.Addr())
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
