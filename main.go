@@ -58,7 +58,7 @@ func grpc_run(dest string, host string, mesh string, ip string, role string) {
 func http_run(dest string, host string, mesh string, ip string, role string) {
 
 	if role == "server" {
-		webserver.Run(server_http_port, version, mesh, ip)
+		webserver.Run(server_http_port, version, mesh, ip, dest, host)
 	} else if role == "client" {
 		if *client_http {
 			go webclient.Run(dest, host, mesh, ip)
