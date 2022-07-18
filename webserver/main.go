@@ -28,7 +28,7 @@ func ingressHandler(w http.ResponseWriter, r *http.Request) {
 	if len(paths) != 2 {
 		c := http.Client{Timeout: time.Duration(1) * time.Second}
 		req, err := http.NewRequest("GET", inputDest+"/ingress-downstream", nil)
-		req.Header.Set("Host", inputHost)
+		req.Host = inputHost
 		req.Header.Set("X-Forwarded-For", r.Header.Get("X-Forwarded-For"))
 		resp, err := c.Do(req)
 		if err != nil {

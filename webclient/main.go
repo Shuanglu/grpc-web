@@ -14,7 +14,7 @@ func Run(httpAddr string, host string, mesh string, ip string) error {
 	if err != nil {
 		log.Printf("Failed to generate request: %s", err)
 	}
-	req.Header.Set("Host", host)
+	req.Host = host
 	req.Header.Set("X-Forwarded-For", ip)
 	var wg sync.WaitGroup
 	for {
