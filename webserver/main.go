@@ -2,11 +2,11 @@ package webserver
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
-
-	"github.com/shuanglu/grpc-web/webclient"
+	"time"
 )
 
 var inputVersion *string
@@ -26,7 +26,21 @@ func ingressHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Server is running in the %q mesh. Version is %q. IP is %q. Request comes from ingress", inputMesh, *inputVersion, inputIp)
 	paths := strings.Split(r.URL.Path, "-")
 	if len(paths) != 2 {
-		webclient.Run(inputDest+"/ingress-downstream", inputHost, inputMesh, r.Header.Get("X-Forwarded-For"))
+		c := http.Client{Timeout: time.Duration(1) * time.Second}
+		req, err := http.NewRequest("GET", inputDest+"/ingress-downstream", nil)
+		req.Header.Set("Host", inputHost)
+		req.Header.Set("X-Forwarded-For", r.Header.Get("X-Forwarded-For"))
+		resp, err := c.Do(req)
+		if err != nil {
+			log.Printf("Could not send: %s", err)
+		} else {
+			body, err := ioutil.ReadAll(resp.Body)
+			if err != nil {
+				log.Printf("Could not read the body: %s", err)
+			}
+			defer resp.Body.Close()
+			log.Printf("HTTP | Client is running in the mesh: %q | %s | Request comes from ingress", mesh, body)
+		}
 	}
 
 }
