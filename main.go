@@ -64,7 +64,7 @@ func http_run(dest string, host string, mesh string, ip string, role string) {
 			go webclient.Run(dest, host, mesh, ip)
 		}
 	} else {
-		go webserver.Run(server_http_port, version, mesh, ip)
+		go webserver.Run(server_http_port, version, mesh, ip, dest, host)
 		if *client_http {
 			go webclient.Run(dest, host, mesh, ip)
 		}
