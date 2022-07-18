@@ -23,7 +23,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 func ingressHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("HTTP | Received the request from %q", r.Header.Get("X-Forwarded-For"))
-	fmt.Fprintf(w, "Server is running in the %q mesh. Version is %q. IP is %q. Request comes from ingress", inputMesh, *inputVersion, inputIp)
+	fmt.Fprintf(w, "Server is running in the %q mesh. Version is %q. IP is %q. Request comes from ingress\n", inputMesh, *inputVersion, inputIp)
 	paths := strings.Split(r.URL.Path, "-")
 	if len(paths) != 2 {
 		c := http.Client{Timeout: time.Duration(1) * time.Second}
@@ -33,6 +33,7 @@ func ingressHandler(w http.ResponseWriter, r *http.Request) {
 		resp, err := c.Do(req)
 		if err != nil {
 			log.Printf("Could not send: %s", err)
+			fmt.Fprintf(w, "Failed to send request to downstream: %s", err)
 		} else {
 			body, err := ioutil.ReadAll(resp.Body)
 			if err != nil {
@@ -40,6 +41,7 @@ func ingressHandler(w http.ResponseWriter, r *http.Request) {
 			}
 			defer resp.Body.Close()
 			log.Printf("HTTP | Client is running in the mesh: %q | %s | Request comes from ingress", inputMesh, body)
+			fmt.Fprintf(w, "Response from downstream is %s\n", string(body))
 		}
 	}
 
