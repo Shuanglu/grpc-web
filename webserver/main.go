@@ -41,7 +41,7 @@ func ingressHandler(w http.ResponseWriter, r *http.Request) {
 			}
 			defer resp.Body.Close()
 			log.Printf("HTTP | Client is running in the mesh: %q | %s | Request comes from ingress", inputMesh, body)
-			fmt.Fprintf(w, "Response from downstream is %s\n", string(body))
+			fmt.Fprintf(w, "Response from downstream is %q\n", string(body))
 		}
 	}
 
