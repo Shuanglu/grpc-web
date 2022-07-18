@@ -23,7 +23,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 func ingressHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("HTTP | Received the request from %q", r.Header.Get("X-Forwarded-For"))
-	fmt.Fprintf(w, "Server is running in the %q mesh. Version is %q. IP is %q. Request comes from ingress\n", inputMesh, *inputVersion, inputIp)
+	fmt.Fprintf(w, "Server is running in the %q mesh. Version is %q. IP is %q. Request comes from ingress and will connect to downstream at %s\n", inputMesh, *inputVersion, inputIp, inputDest+"/ingress-downstream")
 	paths := strings.Split(r.URL.Path, "-")
 	if len(paths) != 2 {
 		c := http.Client{Timeout: time.Duration(1) * time.Second}
