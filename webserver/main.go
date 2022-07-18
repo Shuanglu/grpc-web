@@ -16,17 +16,18 @@ var inputDest string
 var inputHost string
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Server is running in the %q mesh. Version is %q. IP is %q", inputMesh, *inputVersion, inputIp)
 	log.Printf("HTTP | Received the request from %q", r.Header.Get("X-Forwarded-For"))
+	fmt.Fprintf(w, "Server is running in the %q mesh. Version is %q. IP is %q", inputMesh, *inputVersion, inputIp)
+
 }
 
 func ingressHandler(w http.ResponseWriter, r *http.Request) {
+	log.Printf("HTTP | Received the request from %q", r.Header.Get("X-Forwarded-For"))
 	fmt.Fprintf(w, "Server is running in the %q mesh. Version is %q. IP is %q. Request comes from ingress", inputMesh, *inputVersion, inputIp)
 	paths := strings.Split(r.URL.Path, "-")
 	if len(paths) != 2 {
 		webclient.Run(inputDest+"/ingress-downstream", inputHost, inputMesh, r.Header.Get("X-Forwarded-For"))
 	}
-	log.Printf("HTTP | Received the request from %q", r.Header.Get("X-Forwarded-For"))
 
 }
 
