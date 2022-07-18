@@ -39,7 +39,7 @@ func ingressHandler(w http.ResponseWriter, r *http.Request) {
 				log.Printf("Could not read the body: %s", err)
 			}
 			defer resp.Body.Close()
-			log.Printf("HTTP | Client is running in the mesh: %q | %s | Request comes from ingress", mesh, body)
+			log.Printf("HTTP | Client is running in the mesh: %q | %s | Request comes from ingress", inputMesh, body)
 		}
 	}
 
