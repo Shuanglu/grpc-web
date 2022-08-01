@@ -35,7 +35,7 @@ const (
 	name = "world"
 )
 
-func Run(grpcAddr string, host string, mesh string, ip string) error {
+func Run(grpcAddr string, host string, mesh string, ip string, client_request_total int) error {
 
 	// Set up a connection to the server.
 	var opts []grpc.DialOption
@@ -45,11 +45,11 @@ func Run(grpcAddr string, host string, mesh string, ip string) error {
 		log.Printf("did not connect: %v", err)
 	}
 	defer conn.Close()
-
+	count := 0
 	var wg sync.WaitGroup
 	for {
 		wg.Add(1)
-		go func() {
+		go func(count int) {
 			c := pb.NewGreeterClient(conn)
 
 			// Contact the server and print out its response.
@@ -67,9 +67,16 @@ func Run(grpcAddr string, host string, mesh string, ip string) error {
 				}
 			} else {
 				log.Printf("GRPC | client is running in the mesh: %q | %s ", mesh, r.GetMessage())
+				count++
 			}
 			wg.Done()
-		}()
+		}(count)
+		if client_request_total == 0 {
+			continue
+		} else if client_request_total != 0 && count == client_request_total {
+			log.Printf("Sent %d requests to server. Will sleep forever", client_request_total)
+			time.Sleep(time.Duration(1<<63 - 1))
+		}
 		time.Sleep(5 * time.Second)
 	}
 	wg.Wait()
