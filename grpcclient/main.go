@@ -49,7 +49,7 @@ func Run(grpcAddr string, host string, mesh string, ip string, client_request_to
 	var wg sync.WaitGroup
 	for {
 		wg.Add(1)
-		go func(count int) {
+		go func(count *int) {
 			c := pb.NewGreeterClient(conn)
 
 			// Contact the server and print out its response.
@@ -67,10 +67,10 @@ func Run(grpcAddr string, host string, mesh string, ip string, client_request_to
 				}
 			} else {
 				log.Printf("GRPC | client is running in the mesh: %q | %s ", mesh, r.GetMessage())
-				count++
+				*count++
 			}
 			wg.Done()
-		}(count)
+		}(&count)
 		if client_request_total == 0 {
 			continue
 		} else if client_request_total != 0 && count == client_request_total {

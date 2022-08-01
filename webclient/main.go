@@ -20,7 +20,7 @@ func Run(httpAddr string, host string, mesh string, ip string, client_request_to
 	count := 0
 	for {
 		wg.Add(1)
-		go func(count int) {
+		go func(count *int) {
 			resp, err := c.Do(req)
 			if err != nil {
 				log.Printf("Could not send: %s", err)
@@ -31,10 +31,10 @@ func Run(httpAddr string, host string, mesh string, ip string, client_request_to
 				}
 				defer resp.Body.Close()
 				log.Printf("HTTP | Client is running in the mesh: %q | %s ", mesh, body)
-				count++
+				*count++
 			}
 			wg.Done()
-		}(count)
+		}(&count)
 		if client_request_total == 0 {
 			continue
 		} else if client_request_total != 0 && count == client_request_total {
