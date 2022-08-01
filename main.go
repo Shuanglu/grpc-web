@@ -25,7 +25,7 @@ var (
 	client_header_host   = flag.String("client_header_host", "", "the host to be added to the headr")
 	client_http          = flag.Bool("client_http", false, "whether to start http client")
 	client_grpc          = flag.Bool("client_grpc", true, "whether to start grpc client")
-	client_request_total = flag.Int("client_request_total", 100, "the total requests will be sent to server. Default is 100. 0 is endless loop(This will generate lots of data and send to datadogs. Be careful!)")
+	client_request_total = flag.Int("client_request_total", 20, "the total requests will be sent to server. Default is 20. 0 is endless loop(This will generate lots of data and send to datadogs. Be careful!)")
 )
 
 func main() {
