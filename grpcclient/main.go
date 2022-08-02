@@ -74,16 +74,19 @@ func Run(grpcAddr string, host string, mesh string, ip string, client_success_re
 			wg.Done()
 		}(&successCount, &failureCount)
 		if client_failure_request_total == 0 || client_success_request_total == 0 {
+			time.Sleep(5 * time.Second)
 			continue
 		} else if successCount == client_success_request_total {
 			log.Printf("Sent %d requests to server. Will sleep forever", client_success_request_total)
 			time.Sleep(time.Duration(1<<63 - 1))
 		} else if failureCount == client_failure_request_total {
 			log.Printf("Failed to send %d requests to server. Will sleep forever", client_failure_request_total)
+			time.Sleep(time.Duration(1<<63 - 1))
 		} else {
+			time.Sleep(5 * time.Second)
 			continue
 		}
-		time.Sleep(5 * time.Second)
+
 	}
 	wg.Wait()
 
