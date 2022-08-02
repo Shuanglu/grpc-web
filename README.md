@@ -10,6 +10,8 @@
 - -client_header_host "the host to be added to the header"
 - -client_grpc "whether to start grpc client. Default is false"
 - -client_http "whether to start http client. Default is true"
+- -client_success_request_total "the total requests will be sent to server after the connection is established. Default is 20. 0 is endless loop(This will generate lots of data and send to datadogs. Be careful!)"
+- -client_failure_request_total "the total requests will be sent to server with connection failure. Default is 20. 0 is endless loop(This will generate lots of data and send to datadogs. Be careful!)"
 
 ## Build
 - go build -o \<file name\> .

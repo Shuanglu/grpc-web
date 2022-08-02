@@ -26,7 +26,7 @@ var (
 	client_http                  = flag.Bool("client_http", false, "whether to start http client")
 	client_grpc                  = flag.Bool("client_grpc", true, "whether to start grpc client")
 	client_success_request_total = flag.Int("client_success_request_total", 20, "the total requests will be sent to server after the connection is established. Default is 20. 0 is endless loop(This will generate lots of data and send to datadogs. Be careful!)")
-	client_failure_request_total = flag.Int("client_success_request_total", 20, "the total requests will be sent to server with connection failure. Default is 20. 0 is endless loop(This will generate lots of data and send to datadogs. Be careful!)")
+	client_failure_request_total = flag.Int("client_failure_request_total", 20, "the total requests will be sent to server with connection failure. Default is 20. 0 is endless loop(This will generate lots of data and send to datadogs. Be careful!)")
 )
 
 func main() {
