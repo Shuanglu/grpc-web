@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func Run(httpAddr string, host string, mesh string, ip string, client_request_total int) error {
+func Run(httpAddr string, host string, mesh string, ip string, client_success_request_total int, client_failure_request_total int) error {
 	c := http.Client{Timeout: time.Duration(1) * time.Second}
 	req, err := http.NewRequest("GET", httpAddr, nil)
 	if err != nil {
@@ -17,13 +17,15 @@ func Run(httpAddr string, host string, mesh string, ip string, client_request_to
 	req.Host = host
 	req.Header.Set("X-Forwarded-For", ip)
 	var wg sync.WaitGroup
-	count := 0
+	successCount := 0
+	failureCount := 0
 	for {
 		wg.Add(1)
-		go func(count *int) {
+		go func(successCount *int, failureCount *int) {
 			resp, err := c.Do(req)
 			if err != nil {
 				log.Printf("Could not send: %s", err)
+				*failureCount++
 			} else {
 				body, err := ioutil.ReadAll(resp.Body)
 				if err != nil {
@@ -31,15 +33,19 @@ func Run(httpAddr string, host string, mesh string, ip string, client_request_to
 				}
 				defer resp.Body.Close()
 				log.Printf("HTTP | Client is running in the mesh: %q | %s ", mesh, body)
-				*count++
+				*successCount++
 			}
 			wg.Done()
-		}(&count)
-		if client_request_total == 0 {
+		}(&successCount, &failureCount)
+		if client_failure_request_total == 0 || client_success_request_total == 0 {
 			continue
-		} else if client_request_total != 0 && count == client_request_total {
-			log.Printf("Sent %d requests to server. Will sleep forever", client_request_total)
+		} else if successCount == client_success_request_total {
+			log.Printf("Sent %d requests to server. Will sleep forever", client_success_request_total)
 			time.Sleep(time.Duration(1<<63 - 1))
+		} else if failureCount == client_failure_request_total {
+			log.Printf("Failed to send %d requests to server. Will sleep forever", client_failure_request_total)
+		} else {
+			continue
 		}
 		time.Sleep(5 * time.Second)
 	}
