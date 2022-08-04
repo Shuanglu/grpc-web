@@ -12,9 +12,7 @@ func Run(httpAddr string, host string, mesh string, ip string, client_success_re
 	c := http.Client{
 		Timeout: time.Duration(1) * time.Second,
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			redirectURL, _ := req.Response.Location()
-			log.Printf("The request is redirected to %s", redirectURL.Host+"/"+redirectURL.Path)
-			return http.ErrUseLastResponse // or maybe the error from the request
+			return http.ErrUseLastResponse
 		},
 	}
 	req, err := http.NewRequest("GET", httpAddr, nil)
@@ -38,8 +36,14 @@ func Run(httpAddr string, host string, mesh string, ip string, client_success_re
 				if err != nil {
 					log.Printf("Could not read the body: %s", err)
 				}
+				redirectURL, err := req.Response.Location()
+				if err == http.ErrNoLocation {
+					log.Printf("HTTP | Client is running in the mesh: %q | %s ", mesh, body)
+				} else {
+					log.Printf("HTTP | Client is running in the mesh: %q | %s | The request is redirected to %s", mesh, body, redirectURL.Host+redirectURL.Path)
+				}
 				defer resp.Body.Close()
-				log.Printf("HTTP | Client is running in the mesh: %q | %s ", mesh, body)
+
 				*successCount++
 			}
 			wg.Done()
