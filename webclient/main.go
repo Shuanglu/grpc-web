@@ -36,12 +36,8 @@ func Run(httpAddr string, host string, mesh string, ip string, client_success_re
 				if err != nil {
 					log.Printf("Could not read the body: %s", err)
 				}
-				redirectURL, err := resp.Location()
-				if err == http.ErrNoLocation || redirectURL == nil {
-					log.Printf("HTTP | Client is running in the mesh: %q | %s ", mesh, body)
-				} else {
-					log.Printf("HTTP | Client is running in the mesh: %q | The request is redirected to %s ", mesh, redirectURL.Host+redirectURL.Path)
-				}
+				//redirectURL, err := resp.Location()
+				log.Printf("HTTP | Client is running in the mesh: %q | %s ", mesh, body)
 				defer resp.Body.Close()
 
 				*successCount++
