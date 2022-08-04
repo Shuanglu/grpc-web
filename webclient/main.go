@@ -40,7 +40,7 @@ func Run(httpAddr string, host string, mesh string, ip string, client_success_re
 				if err == http.ErrNoLocation || redirectURL == nil {
 					log.Printf("HTTP | Client is running in the mesh: %q | %s ", mesh, body)
 				} else {
-					log.Printf("HTTP | Client is running in the mesh: %q | %s | The request is redirected to %s", mesh, body, redirectURL.Host+redirectURL.Path)
+					log.Printf("HTTP | Client is running in the mesh: %q | The request is redirected to %s ", mesh, redirectURL.Host+redirectURL.Path)
 				}
 				defer resp.Body.Close()
 
