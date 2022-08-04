@@ -12,9 +12,9 @@ func Run(httpAddr string, host string, mesh string, ip string, client_success_re
 	c := http.Client{
 		Timeout: time.Duration(1) * time.Second,
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			redirectURL, nil := req.Response.Location()
+			redirectURL, _ := req.Response.Location()
 			log.Printf("The request is redirected to %s", redirectURL.Host+"/"+redirectURL.Path)
-			return nil // or maybe the error from the request
+			return http.ErrUseLastResponse // or maybe the error from the request
 		},
 	}
 	req, err := http.NewRequest("GET", httpAddr, nil)
